@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-display: "Poppins", sans-serif;
+  
+  --color-brand-magenta: #8A1B5E;
+  --color-brand-gold: #D4AF37;
+  --color-brand-cream: #F3E8EE;
+  --color-brand-dark: #2D1B24;
+}
+
+@layer base {
+  body {
+    @apply text-[#333] bg-white;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  
+  h1, h2, h3, h4 {
+    @apply font-serif;
+  }
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .glass-nav {
+    @apply bg-white/70 backdrop-blur-md border-b border-white/20;
+  }
+  
+  .text-glow {
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  }
+  
+  .bg-magenta-gradient {
+    background: linear-gradient(135deg, #8A1B5E 0%, #2D1B24 100%);
+  }
+  
+  .cursor-close {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E") 16 16, pointer;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  .animate-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .animate-shimmer::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    animation: shimmer 2.5s infinite;
+  }
+
+  @keyframes soft-pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(138, 27, 94, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px 10px rgba(138, 27, 94, 0); }
+  }
+
+  .animate-soft-pulse {
+    animation: soft-pulse 2s infinite ease-in-out;
+  }
+
+  @keyframes bounce-horizontal {
+    0%, 100% { transform: translateX(0) translateY(-50%) rotate(90deg); }
+    50% { transform: translateX(-10px) translateY(-50%) rotate(90deg); }
+  }
+
+  .animate-bounce-horizontal {
+    animation: bounce-horizontal 1.5s infinite;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(45deg); }
+    50% { transform: translateY(-20px) rotate(50deg); }
+  }
+
+  .animate-float {
+    animation: float 10s ease-in-out infinite;
+  }
+
+  @keyframes slow-zoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+  }
+
+  .animate-slow-zoom {
+    animation: slow-zoom 20s linear infinite alternate;
+  }
+
+  .organic-shadow {
+    box-shadow: 0 20px 50px -10px rgba(138, 27, 94, 0.15), 0 10px 20px -5px rgba(212, 175, 55, 0.1);
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+    display: flex;
+    width: max-content;
+  }
+
+  @keyframes vertical-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  .animate-vertical-float {
+    animation: vertical-float 6s ease-in-out infinite;
+  }
+
+  @keyframes whatsapp-glow {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+  }
+
+  .animate-whatsapp-glow {
+    animation: whatsapp-glow 2s infinite;
+  }
+}

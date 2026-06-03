@@ -4,6 +4,7 @@ import detailImg from '../assets/VIVE Product/kumkumadi/oil.jpg';
 
 const WorkshopBanner = () => {
   const [showVideo, setShowVideo] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   // Direct MP4 URL extracted from Instagram (Fresh link)
   const VIDEO_URL = "https://scontent-iad3-2.cdninstagram.com/o1/v/t16/f2/m69/AQPdR7JrjJTh_D6N9V-I4dovktRhlfSadGHVVPsMsVkKV6pkrx7K8MCUemR47__1NgiA-mf_fr5SQY8EsUmSZUHu.mp4?strext=1&_nc_cat=105&_nc_sid=5e9851&_nc_ht=scontent-iad3-2.cdninstagram.com&_nc_ohc=MqTHaV5cpJAQ7kNvwGay0nu&efg=eyJ2ZW5jb2RlX3RhZyI6Inhwdl9wcm9ncmVzc2l2ZS5JTlNUQUdSQU0uQ0xJUFMuQzMuNzIwLmRhc2hfYmFzZWxpbmVfMV92MSIsInhwdl9hc3NldF9pZCI6MTE4ODg4MTcxMzQxNzI3MiwiYXNzZXRfYWdlX2RheXMiOjExMywidmlfdXNlY2FzZV9pZCI6MTAwOTksImR1cmF0aW9uX3MiOjQ0LCJ1cmxnZW5fc291cmNlIjoid3d3In0%3D&ccb=17-1&vs=5dbfc370db4f144d&_nc_vs=HBksFQIYOnBhc3N0aHJvdWdoX2V2ZXJzdG9yZS9HRU1lWmlTbkdpLVIta1FFQVAxeFhSQVZobVI3YnNwVEFRQUYVAALIARIAFQIYRmlnX3hwdl9yZWVsc19wZXJtYW5lbnRfc3JfcHJvZC84NTQwNDkwNzQxODc4NjlfODk3NjcxNzQ5Mzc5MjA2NTE4OS5tcDQVAgLIARIAKAAYABsCiAd1c2Vfb2lsATEScHJvZ3Jlc3NpdmVfcmVjaXBlATEVAAAm8LCqg4PSnAQVAigCQzMsF0BGSHKwIMScGBJkYXNoX2Jhc2VsaW5lXzFfdjERAHX-B2XmnQEA&_nc_gid=gxxXo0GLVyS4xLbFH4SAnQ&_nc_zt=28&_nc_ss=7a22e&oh=00_Af7X5U47wJfWGK1u1wyQjtWw47tWRTLvPASQSWNEE1gHiQ&oe=6A0399BB";
@@ -93,15 +94,12 @@ const WorkshopBanner = () => {
 
             <div className="flex items-center gap-10">
                <button 
-                onClick={() => setShowVideo(true)}
-                className="px-10 py-4 bg-brand-magenta text-white font-bold rounded-xl hover:bg-brand-dark transition-all transform hover:-translate-y-1 shadow-xl shadow-brand-magenta/20 text-[10px] uppercase tracking-[0.3em] whitespace-nowrap"
+                onClick={() => setShowForm(true)}
+                className="px-10 py-4 bg-brand-magenta text-white font-bold rounded-xl hover:bg-brand-dark transition-all transform hover:-translate-y-1 shadow-xl shadow-brand-magenta/20 text-[10px] uppercase tracking-[0.3em] whitespace-nowrap cursor-pointer"
                >
                  Enroll Now
                </button>
-               <div className="text-left">
-                  <p className="text-brand-dark font-bold text-lg leading-none mb-1">₹4,999</p>
-                  <p className="text-gray-400 text-[10px] uppercase tracking-widest font-bold">Full Course</p>
-               </div>
+
             </div>
           </div>
 
@@ -114,7 +112,7 @@ const WorkshopBanner = () => {
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-sm transition-all duration-500"
           onClick={() => setShowVideo(false)}
         >
-          <button className="absolute top-8 right-8 text-white hover:text-brand-gold transition-colors z-10">
+          <button className="absolute top-8 right-8 text-white hover:text-brand-gold transition-colors z-10 cursor-pointer" onClick={() => setShowVideo(false)}>
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
@@ -130,6 +128,47 @@ const WorkshopBanner = () => {
               controls
               className="w-full h-full object-contain"
             />
+          </div>
+        </div>
+      )}
+
+      {/* Enrollment Form Modal Popup */}
+      {showForm && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/80 backdrop-blur-sm transition-all duration-500"
+          onClick={() => setShowForm(false)}
+        >
+          <div 
+            className="relative w-full max-w-md bg-white rounded-3xl overflow-hidden shadow-2xl p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              className="absolute top-4 right-4 text-gray-400 hover:text-brand-dark transition-colors cursor-pointer"
+              onClick={() => setShowForm(false)}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+            <h3 className="text-2xl font-serif font-bold text-brand-dark mb-2">Enroll Now</h3>
+            <p className="text-gray-500 text-sm mb-6">Fill in your details to get started with the Masterclass.</p>
+            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setShowForm(false); alert('Enrollment submitted successfully!'); }}>
+              <div>
+                <label className="block text-sm font-bold text-brand-dark mb-1">Full Name</label>
+                <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-magenta focus:ring-1 focus:ring-brand-magenta outline-none transition-all" placeholder="John Doe" required />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-brand-dark mb-1">Email Address</label>
+                <input type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-magenta focus:ring-1 focus:ring-brand-magenta outline-none transition-all" placeholder="john@example.com" required />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-brand-dark mb-1">Phone Number</label>
+                <input type="tel" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-magenta focus:ring-1 focus:ring-brand-magenta outline-none transition-all" placeholder="+91 98765 43210" required />
+              </div>
+              <button type="submit" className="w-full py-4 bg-brand-magenta text-white font-bold rounded-xl hover:bg-brand-dark transition-all shadow-xl shadow-brand-magenta/20 mt-4 uppercase tracking-wider text-sm cursor-pointer">
+                Submit Enrollment
+              </button>
+            </form>
           </div>
         </div>
       )}

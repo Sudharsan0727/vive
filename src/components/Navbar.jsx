@@ -158,15 +158,15 @@ const Navbar = () => {
             </button>
 
             {/* Main Links */}
-            <div className="flex items-center gap-8 pl-8 flex-1 h-full">
-              {['Face Care', 'Hair Care', 'Foot Care', 'Lip Care', 'Body Care', 'Soap'].map((item) => (
-                <div key={item} className="group relative h-full flex items-center">
+            <div className="flex items-center justify-between gap-1 xl:gap-3 px-1 lg:px-4 flex-1 h-full">
+              {['Face Care', 'Lip Care', 'Eye Care', 'Hair Care', 'Body Care', 'Foot Care', 'Hand made soap'].map((item) => (
+                <div key={item} className="group relative h-full flex items-center shrink-0">
                   <a
                     href={`/#${item.toLowerCase().replace(/ /g, '-')}`}
-                    className="text-[13px] font-semibold text-brand-dark hover:text-white hover:bg-brand-magenta transition-all px-4 py-1.5 rounded-full flex items-center gap-1"
+                    className="text-[10px] lg:text-[11px] xl:text-[13px] font-semibold text-brand-dark hover:text-white hover:bg-brand-magenta transition-all px-1.5 lg:px-2 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap"
                   >
                     {item}
-                    {['Face Care', 'Hair Care', 'Foot Care', 'Lip Care', 'Body Care', 'Soap'].includes(item) ? (
+                    {['Face Care', 'Lip Care', 'Eye Care', 'Hair Care', 'Body Care', 'Foot Care', 'Hand made soap'].includes(item) ? (
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 opacity-60 group-hover:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
@@ -242,7 +242,7 @@ const Navbar = () => {
 
                   {/* Mega Menu for Hair Care */}
                   {item === 'Hair Care' && (
-                    <div className="absolute top-[100%] left-[-150px] w-[850px] bg-white shadow-[0_20px_50px_rgba(138,27,94,0.15)] rounded-b-xl border-t-2 border-brand-magenta opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-8 flex gap-8 translate-y-2 group-hover:translate-y-0 cursor-default">
+                    <div className="absolute top-[100%] left-[-300px] w-[850px] bg-white shadow-[0_20px_50px_rgba(138,27,94,0.15)] rounded-b-xl border-t-2 border-brand-magenta opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-8 flex gap-8 translate-y-2 group-hover:translate-y-0 cursor-default">
                       
                       {/* Column 1 */}
                       <div className="flex-1">
@@ -296,7 +296,7 @@ const Navbar = () => {
 
                   {/* Mega Menu for Foot Care */}
                   {item === 'Foot Care' && (
-                    <div className="absolute top-[100%] left-[-300px] w-[850px] bg-white shadow-[0_20px_50px_rgba(138,27,94,0.15)] rounded-b-xl border-t-2 border-brand-magenta opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-8 flex gap-8 translate-y-2 group-hover:translate-y-0 cursor-default">
+                    <div className="absolute top-[100%] left-[-550px] w-[850px] bg-white shadow-[0_20px_50px_rgba(138,27,94,0.15)] rounded-b-xl border-t-2 border-brand-magenta opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-8 flex gap-8 translate-y-2 group-hover:translate-y-0 cursor-default">
                       
                       {/* Column 1: Foot Care */}
                       <div className="flex-1">
@@ -309,24 +309,18 @@ const Navbar = () => {
                         </ul>
                       </div>
                       
-                      {/* Column 2: Eye Care */}
-                      <div className="flex-1">
-                        <h3 className="text-brand-magenta font-serif font-bold text-lg mb-4 border-b border-gray-100 pb-2">Eye Care</h3>
-                        <ul className="space-y-2.5">
-                          <li><a href="/#eye-gel" className="text-[13px] font-medium text-gray-600 hover:text-brand-magenta transition-colors block">Under Eye Gel</a></li>
-                          <li><a href="/#eye-serum" className="text-[13px] font-medium text-gray-600 hover:text-brand-magenta transition-colors block">Under Eye Serum</a></li>
-                          <li><a href="/#growth-serum" className="text-[13px] font-medium text-gray-600 hover:text-brand-magenta transition-colors block mt-4">Eyebrow/Eyelash Growth Serum</a></li>
-                        </ul>
-                      </div>
-
-                      {/* Column 3: Powders & Cleansers */}
+                      {/* Column 2: Powders & Cleansers */}
                       <div className="flex-1">
                         <h3 className="text-brand-magenta font-serif font-bold text-lg mb-4 border-b border-gray-100 pb-2">Cleansing Powders</h3>
                         <ul className="space-y-2.5">
                           <li><a href="/#bath-powder" className="text-[13px] font-medium text-gray-600 hover:text-brand-magenta transition-colors block">Nalangu Maavu / Bath Powder</a></li>
                           <li><a href="/#hair-wash" className="text-[13px] font-medium text-gray-600 hover:text-brand-magenta transition-colors block">Herbal Hair Wash Powder</a></li>
                         </ul>
-                        <h3 className="text-brand-magenta font-serif font-bold text-lg mt-6 mb-4 border-b border-gray-100 pb-2">Others</h3>
+                      </div>
+
+                      {/* Column 3: Others */}
+                      <div className="flex-1">
+                        <h3 className="text-brand-magenta font-serif font-bold text-lg mb-4 border-b border-gray-100 pb-2">Others</h3>
                         <ul className="space-y-2.5">
                           <li><a href="/#butterfly-pea" className="text-[13px] font-medium text-gray-600 hover:text-brand-magenta transition-colors block">Dried Butterfly Pea Flower</a></li>
                         </ul>
@@ -351,7 +345,7 @@ const Navbar = () => {
 
                   {/* Mega Menu for Lip Care */}
                   {item === 'Lip Care' && (
-                    <div className="absolute top-[100%] left-[-400px] w-[800px] bg-white shadow-[0_20px_50px_rgba(138,27,94,0.15)] rounded-b-xl border-t-2 border-brand-magenta opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-8 flex gap-8 translate-y-2 group-hover:translate-y-0 cursor-default">
+                    <div className="absolute top-[100%] left-[-150px] w-[800px] bg-white shadow-[0_20px_50px_rgba(138,27,94,0.15)] rounded-b-xl border-t-2 border-brand-magenta opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-8 flex gap-8 translate-y-2 group-hover:translate-y-0 cursor-default">
                       
                       {/* Column 1: Lip Balms */}
                       <div className="flex-1">
@@ -388,6 +382,40 @@ const Navbar = () => {
                           </div>
                         </a>
                         <p className="mt-4 text-[11px] text-brand-dark/60 text-center font-medium">Natural hydration for soft, healthy lips.</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Mega Menu for Eye Care */}
+                  {item === 'Eye Care' && (
+                    <div className="absolute top-[100%] left-[-200px] w-[800px] bg-white shadow-[0_20px_50px_rgba(138,27,94,0.15)] rounded-b-xl border-t-2 border-brand-magenta opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-8 flex gap-8 translate-y-2 group-hover:translate-y-0 cursor-default">
+                      
+                      {/* Column 1: Eye Serums & Gels */}
+                      <div className="flex-1">
+                        <h3 className="text-brand-magenta font-serif font-bold text-lg mb-4 border-b border-gray-100 pb-2">Eye Gels & Serums</h3>
+                        <ul className="space-y-2.5">
+                          <li><a href="/#eye-gel" className="text-[13px] font-medium text-gray-600 hover:text-brand-magenta transition-colors block">Under Eye Gel</a></li>
+                          <li><a href="/#eye-serum" className="text-[13px] font-medium text-gray-600 hover:text-brand-magenta transition-colors block">Under Eye Serum</a></li>
+                        </ul>
+                      </div>
+                      
+                      {/* Column 2: Growth Serums */}
+                      <div className="flex-1">
+                        <h3 className="text-brand-magenta font-serif font-bold text-lg mb-4 border-b border-gray-100 pb-2">Growth Serums</h3>
+                        <ul className="space-y-2.5">
+                          <li><a href="/#growth-serum" className="text-[13px] font-medium text-gray-600 hover:text-brand-magenta transition-colors block">Eyebrow/Eyelash Growth Serum</a></li>
+                        </ul>
+                      </div>
+
+                      {/* Column 3: Promo */}
+                      <div className="flex-1 bg-brand-cream/30 -my-8 -mr-8 p-8 rounded-br-xl flex flex-col justify-center">
+                        <a href="/#eye-collection" className="rounded-lg overflow-hidden relative group/img cursor-pointer shadow-md block">
+                          <img src={facecareImg} alt="Eye Care Special" className="w-full h-48 object-cover transition-transform duration-700 group-hover/img:scale-110" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-4">
+                            <span className="text-white font-bold text-sm tracking-wide">Revitalize Your Eyes</span>
+                          </div>
+                        </a>
+                        <p className="mt-4 text-[11px] text-brand-dark/60 text-center font-medium">Brighten and restore your natural glow.</p>
                       </div>
                     </div>
                   )}
@@ -432,9 +460,9 @@ const Navbar = () => {
                     </div>
                   )}
 
-                  {/* Mega Menu for Soap */}
-                  {item === 'Soap' && (
-                    <div className="absolute top-[100%] right-[-350px] w-[800px] bg-white shadow-[0_20px_50px_rgba(138,27,94,0.15)] rounded-b-xl border-t-2 border-brand-magenta opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-8 flex gap-8 translate-y-2 group-hover:translate-y-0 cursor-default">
+                  {/* Mega Menu for Hand made soap */}
+                  {item === 'Hand made soap' && (
+                    <div className="absolute top-[100%] right-0 w-[800px] bg-white shadow-[0_20px_50px_rgba(138,27,94,0.15)] rounded-b-xl border-t-2 border-brand-magenta opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-8 flex gap-8 translate-y-2 group-hover:translate-y-0 cursor-default">
                       
                       {/* Column 1: Soaps Part 1 */}
                       <div className="flex-1">
@@ -524,23 +552,27 @@ const Navbar = () => {
                 items: ['Serums & Oils', 'Cleansers & Scrubs', 'Creams & Gels', 'Packs & Powders'] 
               },
               { 
-                name: 'Hair Care', 
-                items: ['Shampoo & Cleansers', 'Conditioners & Gels', 'Oils & Accessories', 'Packs & Dyes'] 
-              },
-              { 
-                name: 'Foot Care', 
-                items: ['Foot Soaks', 'Foot Butters', 'Eye Care', 'Eco-Friendly'] 
-              },
-              { 
                 name: 'Lip Care', 
                 items: ['Lip Balms', 'Lip Scrubs', 'Lip Serums'] 
+              },
+              { 
+                name: 'Eye Care', 
+                items: ['Under Eye Gel', 'Under Eye Serum', 'Growth Serum'] 
+              },
+              { 
+                name: 'Hair Care', 
+                items: ['Shampoo & Cleansers', 'Conditioners & Gels', 'Oils & Accessories', 'Packs & Dyes'] 
               },
               { 
                 name: 'Body Care', 
                 items: ['Body Lotions', 'Body Scrubs', 'Special Care'] 
               },
               { 
-                name: 'Soap', 
+                name: 'Foot Care', 
+                items: ['Foot Soaks', 'Foot Butters', 'Eco-Friendly'] 
+              },
+              { 
+                name: 'Hand made soap', 
                 items: ['Cold Process Soaps', 'Workshops', 'Gift Combos'] 
               }
             ].map((category) => (

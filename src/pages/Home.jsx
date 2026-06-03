@@ -4,13 +4,11 @@ import Hero from '../components/Hero';
 import ProductFinder from '../components/ProductFinder';
 import FeaturedCategories from '../components/FeaturedCategories';
 import Bestsellers from '../components/Bestsellers';
-import FeaturedProducts from '../components/FeaturedProducts';
 import CustomerTestimonials from '../components/CustomerTestimonials';
 import TrustBadges from '../components/TrustBadges';
 import BrandStory from '../components/BrandStory';
 import WhyVive from '../components/WhyVive';
 import WorkshopBanner from '../components/WorkshopBanner';
-import QuizCTA from '../components/QuizCTA';
 import InstagramReels from '../components/InstagramReels';
 import Footer from '../components/Footer';
 
@@ -23,14 +21,12 @@ const Home = () => {
         <ProductFinder />
         <Bestsellers />
         <FeaturedCategories />
-        <FeaturedProducts />
         <BrandStory />
         <WhyVive />
         <WorkshopBanner />
         <InstagramReels />
         <CustomerTestimonials />
         <TrustBadges />
-        <QuizCTA />
       </main>
       <Footer />
     </div>

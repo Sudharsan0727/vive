@@ -83,14 +83,7 @@ const BrandStory = () => {
             </div>
           </div>
 
-          <button className="mt-6 flex items-center gap-4 text-brand-gold font-bold group">
-            Learn More About Our Journey
-            <div className="w-10 h-10 rounded-full border border-brand-gold/30 flex items-center justify-center group-hover:bg-brand-gold group-hover:text-brand-dark transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </div>
-          </button>
+
         </div>
       </div>
     </section>

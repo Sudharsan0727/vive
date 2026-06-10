@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import popupBg from '/boutique_popup_bg_1778236451144.png'; // Using the generated image
 

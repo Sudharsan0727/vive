@@ -1,10 +1,13 @@
+"use client";
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { BESTSELLERS, FEATURED_PRODUCTS, CATEGORIES } from '../../constants/BrandAssets';
+import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+
+import { BESTSELLERS, FEATURED_PRODUCTS, CATEGORIES } from '@/constants/BrandAssets';
 
 const AdminProductEdit = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate = useRouter();
   
   // Combine all products to find the one we're editing
   const allProducts = [...BESTSELLERS, ...FEATURED_PRODUCTS].reduce((acc, current) => {
@@ -14,60 +17,19 @@ const AdminProductEdit = () => {
     return acc;
   }, []);
 
-  const isNewProduct = id === 'new';
-  const product = isNewProduct ? null : allProducts.find(p => p.id === parseInt(id));
+  const product = allProducts.find(p => p.id === parseInt(id));
   
   // Define fallback if product not found (for dev/demo)
-  const editingProduct = isNewProduct ? {
-    id: Date.now(),
-    name: '',
-    category: 'Face Care',
-    stock: 0,
-    status: 'Draft',
-    image: 'https://placehold.co/400x400/f8fafc/cbd5e1?text=Add+Image',
-    price: ''
-  } : (product ? {
+  const editingProduct = product ? {
     ...product,
     category: product.name.toLowerCase().includes('hair') || product.name.toLowerCase().includes('shampoo') ? 'Hair Care' : 
               (product.name.toLowerCase().includes('kumkumadi') || product.name.toLowerCase().includes('nalugumavu') ? 'Face Care' : 'Body Care'),
     stock: Math.floor(Math.random() * 100) + 20,
     status: 'Active'
-  } : null);
+  } : null;
 
   const [activeTab, setActiveTab] = useState('details');
   const [activeWisdomTab, setActiveWisdomTab] = useState('sacred-ritual');
-
-  const [testimonialPage, setTestimonialPage] = useState(1);
-  const reviewsPerPage = 3;
-  const [testimonials, setTestimonials] = useState([
-    { id: 1, name: "Ananya Sharma", rating: 5, date: "11/02/2026", title: "The Ritual That Transformed My Skin", content: "I’ve tried countless serums, but Vive’s Kumkumadi Oil is the only one that truly worked." },
-    { id: 2, name: "Kavya Iyer", rating: 5, date: "11/02/2026", title: "Golden Glow in a Bottle", content: "The Vive Vitamin C serum is simply transformative. It cleared my stubborn spots in just two weeks." },
-    { id: 3, name: "Rohan Deshmukh", rating: 4, date: "10/02/2026", title: "Purity Meets Deep Hydration", content: "Finally a cleanser that respects my skin barrier. Leaves me feeling refreshed and hydrated." },
-    { id: 4, name: "Priya Nair", rating: 5, date: "09/02/2026", title: "Incredible Results", content: "My pigmentation has faded significantly after consistent use. Highly recommend!" },
-    { id: 5, name: "Arjun Reddy", rating: 5, date: "08/02/2026", title: "Best Purchase", content: "Bought this for my mother and she loves it. Her skin looks much more radiant." }
-  ]);
-
-  const totalTestimonialPages = Math.ceil(testimonials.length / reviewsPerPage);
-  const startTestimonialIndex = (testimonialPage - 1) * reviewsPerPage;
-  const currentTestimonials = testimonials.slice(startTestimonialIndex, startTestimonialIndex + reviewsPerPage);
-
-  const [variants, setVariants] = useState([
-    { id: 1, size: '15', unit: 'ML', price: '1299', points: '130', badge: '' },
-    { id: 2, size: '23', unit: 'ML', price: '1819', points: '182', badge: 'Best Deal' },
-    { id: 3, size: '30', unit: 'ML', price: '2338', points: '234', badge: '' }
-  ]);
-
-  const handleAddVariant = () => {
-    setVariants([...variants, { id: Date.now(), size: '', unit: 'ML', price: '', points: '', badge: '' }]);
-  };
-
-  const handleRemoveVariant = (id) => {
-    setVariants(variants.filter(v => v.id !== id));
-  };
-
-  const handleVariantChange = (id, field, value) => {
-    setVariants(variants.map(v => v.id === id ? { ...v, [field]: value } : v));
-  };
 
   if (!editingProduct) {
     return (
@@ -87,10 +49,8 @@ const AdminProductEdit = () => {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
           </button>
           <div>
-            <h1 className="text-3xl font-bold text-brand-magenta font-serif">{isNewProduct ? 'Add New Product' : 'Edit Product'}</h1>
-            <p className="text-sm text-slate-600 mt-1">
-              {isNewProduct ? 'Create a new product listing.' : `PRD-${editingProduct.id.toString().padStart(3, '0')} • ${editingProduct.name}`}
-            </p>
+            <h1 className="text-3xl font-bold text-brand-magenta font-serif">Edit Product</h1>
+            <p className="text-sm text-slate-600 mt-1">PRD-{editingProduct.id.toString().padStart(3, '0')} • {editingProduct.name}</p>
           </div>
         </div>
         <div className="flex gap-3">
@@ -130,7 +90,7 @@ const AdminProductEdit = () => {
               {/* Image Section */}
               <div className="col-span-1 space-y-4">
                 <div className="aspect-square bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 relative group shadow-sm">
-                  <img src={editingProduct.image} alt={editingProduct.name} className="w-full h-full object-cover" />
+                  <img src={typeof (editingProduct.image) === 'object' ? (editingProduct.image)?.src : (editingProduct.image)} alt={editingProduct.name} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <button className="px-4 py-2 bg-white text-brand-dark text-sm font-bold rounded-full shadow-sm hover:bg-brand-magenta hover:text-white transition-colors">Change Primary Image</button>
                   </div>
@@ -179,7 +139,7 @@ const AdminProductEdit = () => {
                       <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Product Variants (Sizes & Pricing)</label>
                       <p className="text-[10px] text-slate-500 mt-1">Manage different sizes (e.g. 15 ML, 30 ML, 50g) and their specific prices.</p>
                     </div>
-                    <button onClick={handleAddVariant} className="text-xs bg-brand-magenta text-white px-3 py-1.5 rounded-lg font-bold hover:bg-brand-magenta/90 shadow-sm transition-colors">+ Add Variant</button>
+                    <button className="text-xs bg-brand-magenta text-white px-3 py-1.5 rounded-lg font-bold hover:bg-brand-magenta/90 shadow-sm transition-colors">+ Add Variant</button>
                   </div>
                   
                   <div className="bg-white/50 rounded-xl border border-slate-200 overflow-hidden">
@@ -195,80 +155,110 @@ const AdminProductEdit = () => {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {variants.map((variant) => (
-                          <tr key={variant.id} className="group hover:bg-white/60 transition-colors">
-                            <td className="p-2 pl-3">
-                              <div className="w-10 h-10 mx-auto bg-slate-100 border border-dashed border-slate-300 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:border-brand-magenta/50 transition-colors relative shadow-sm">
-                                 <img src={editingProduct.image} alt="Variant" className="w-full h-full object-cover" />
-                                 <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold">Edit</div>
-                              </div>
-                            </td>
-                            <td className="p-2">
-                              <div className="flex bg-white border border-slate-200 rounded-lg overflow-hidden focus-within:ring-1 focus-within:ring-brand-magenta/40 shadow-inner w-32">
-                                <input 
-                                  type="text" 
-                                  value={variant.size} 
-                                  onChange={(e) => handleVariantChange(variant.id, 'size', e.target.value)}
-                                  className="w-full px-2 py-1.5 text-sm font-bold text-slate-800 focus:outline-none" 
-                                  placeholder="e.g. 15"
-                                />
-                                <select 
-                                  value={variant.unit}
-                                  onChange={(e) => handleVariantChange(variant.id, 'unit', e.target.value)}
-                                  className="bg-slate-50 border-l border-slate-200 px-2 py-1.5 text-xs text-slate-600 font-bold focus:outline-none cursor-pointer"
-                                >
-                                  <option value="ML">ML</option>
-                                  <option value="g">g</option>
-                                  <option value="L">L</option>
-                                  <option value="kg">kg</option>
-                                </select>
-                              </div>
-                            </td>
-                            <td className="p-2">
-                              <input 
-                                type="text" 
-                                value={variant.price} 
-                                onChange={(e) => handleVariantChange(variant.id, 'price', e.target.value)}
-                                className="w-24 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold text-brand-magenta focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" 
-                                placeholder="Price"
-                              />
-                            </td>
-                            <td className="p-2 text-center">
-                              <input 
-                                type="text" 
-                                value={variant.points} 
-                                onChange={(e) => handleVariantChange(variant.id, 'points', e.target.value)}
-                                className="w-16 text-center bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" 
-                                placeholder="Pts"
-                              />
-                            </td>
-                            <td className="p-2">
-                              <input 
-                                type="text" 
-                                value={variant.badge} 
-                                onChange={(e) => handleVariantChange(variant.id, 'badge', e.target.value)}
-                                placeholder="e.g. Best Deal" 
-                                className="w-full max-w-[150px] bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" 
-                              />
-                            </td>
-                            <td className="p-2 pr-3 text-center">
-                              <button 
-                                onClick={() => handleRemoveVariant(variant.id)}
-                                className="text-slate-400 hover:text-red-500 p-1.5 rounded-full hover:bg-red-50 transition-colors" 
-                                title="Remove Variant"
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                        {variants.length === 0 && (
-                          <tr>
-                            <td colSpan="6" className="p-4 text-center text-slate-400 text-sm">
-                              No variants added. Click "+ Add Variant" to create one.
-                            </td>
-                          </tr>
-                        )}
+                        {/* Variant 1 */}
+                        <tr className="group hover:bg-white/60 transition-colors">
+                          <td className="p-2 pl-3">
+                            <div className="w-10 h-10 mx-auto bg-slate-100 border border-dashed border-slate-300 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:border-brand-magenta/50 transition-colors relative shadow-sm">
+                               <img src={typeof (editingProduct.image) === 'object' ? (editingProduct.image)?.src : (editingProduct.image)} alt="Variant" className="w-full h-full object-cover" />
+                               <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold">Edit</div>
+                            </div>
+                          </td>
+                          <td className="p-2">
+                            <div className="flex bg-white border border-slate-200 rounded-lg overflow-hidden focus-within:ring-1 focus-within:ring-brand-magenta/40 shadow-inner w-32">
+                              <input type="text" defaultValue="15" className="w-full px-2 py-1.5 text-sm font-bold text-slate-800 focus:outline-none" />
+                              <select className="bg-slate-50 border-l border-slate-200 px-2 py-1.5 text-xs text-slate-600 font-bold focus:outline-none cursor-pointer">
+                                <option>ML</option>
+                                <option>g</option>
+                                <option>L</option>
+                                <option>kg</option>
+                              </select>
+                            </div>
+                          </td>
+                          <td className="p-2">
+                            <input type="text" defaultValue="1299" className="w-24 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold text-brand-magenta focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" />
+                          </td>
+                          <td className="p-2 text-center">
+                            <input type="text" defaultValue="130" className="w-16 text-center bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" />
+                          </td>
+                          <td className="p-2">
+                            <input type="text" placeholder="e.g. Best Deal" className="w-full max-w-[150px] bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" />
+                          </td>
+                          <td className="p-2 pr-3 text-center">
+                            <button className="text-slate-400 hover:text-red-500 p-1.5 rounded-full hover:bg-red-50 transition-colors" title="Remove Variant">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                          </td>
+                        </tr>
+
+                        {/* Variant 2 */}
+                        <tr className="group hover:bg-white/60 transition-colors">
+                          <td className="p-2 pl-3">
+                            <div className="w-10 h-10 mx-auto bg-slate-100 border border-dashed border-slate-300 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:border-brand-magenta/50 transition-colors relative shadow-sm">
+                               <img src={typeof (editingProduct.image) === 'object' ? (editingProduct.image)?.src : (editingProduct.image)} alt="Variant" className="w-full h-full object-cover" />
+                               <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold">Edit</div>
+                            </div>
+                          </td>
+                          <td className="p-2">
+                            <div className="flex bg-white border border-slate-200 rounded-lg overflow-hidden focus-within:ring-1 focus-within:ring-brand-magenta/40 shadow-inner w-32">
+                              <input type="text" defaultValue="23" className="w-full px-2 py-1.5 text-sm font-bold text-slate-800 focus:outline-none" />
+                              <select className="bg-slate-50 border-l border-slate-200 px-2 py-1.5 text-xs text-slate-600 font-bold focus:outline-none cursor-pointer">
+                                <option>ML</option>
+                                <option>g</option>
+                                <option>L</option>
+                                <option>kg</option>
+                              </select>
+                            </div>
+                          </td>
+                          <td className="p-2">
+                            <input type="text" defaultValue="1819" className="w-24 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold text-brand-magenta focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" />
+                          </td>
+                          <td className="p-2 text-center">
+                            <input type="text" defaultValue="182" className="w-16 text-center bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" />
+                          </td>
+                          <td className="p-2">
+                            <input type="text" defaultValue="Best Deal" className="w-full max-w-[150px] bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" />
+                          </td>
+                          <td className="p-2 pr-3 text-center">
+                            <button className="text-slate-400 hover:text-red-500 p-1.5 rounded-full hover:bg-red-50 transition-colors" title="Remove Variant">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                          </td>
+                        </tr>
+
+                        {/* Variant 3 */}
+                        <tr className="group hover:bg-white/60 transition-colors">
+                          <td className="p-2 pl-3">
+                            <div className="w-10 h-10 mx-auto bg-slate-100 border border-dashed border-slate-300 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:border-brand-magenta/50 transition-colors relative shadow-sm">
+                               <img src={typeof (editingProduct.image) === 'object' ? (editingProduct.image)?.src : (editingProduct.image)} alt="Variant" className="w-full h-full object-cover" />
+                               <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-bold">Edit</div>
+                            </div>
+                          </td>
+                          <td className="p-2">
+                            <div className="flex bg-white border border-slate-200 rounded-lg overflow-hidden focus-within:ring-1 focus-within:ring-brand-magenta/40 shadow-inner w-32">
+                              <input type="text" defaultValue="30" className="w-full px-2 py-1.5 text-sm font-bold text-slate-800 focus:outline-none" />
+                              <select className="bg-slate-50 border-l border-slate-200 px-2 py-1.5 text-xs text-slate-600 font-bold focus:outline-none cursor-pointer">
+                                <option>ML</option>
+                                <option>g</option>
+                                <option>L</option>
+                                <option>kg</option>
+                              </select>
+                            </div>
+                          </td>
+                          <td className="p-2">
+                            <input type="text" defaultValue="2338" className="w-24 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold text-brand-magenta focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" />
+                          </td>
+                          <td className="p-2 text-center">
+                            <input type="text" defaultValue="234" className="w-16 text-center bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" />
+                          </td>
+                          <td className="p-2">
+                            <input type="text" placeholder="e.g. Best Deal" className="w-full max-w-[150px] bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-brand-magenta/40 shadow-inner" />
+                          </td>
+                          <td className="p-2 pr-3 text-center">
+                            <button className="text-slate-400 hover:text-red-500 p-1.5 rounded-full hover:bg-red-50 transition-colors" title="Remove Variant">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -523,8 +513,12 @@ const AdminProductEdit = () => {
                 <button className="px-4 py-2 bg-brand-magenta text-white text-xs font-bold rounded-lg hover:bg-brand-magenta/90 transition-colors shadow-sm">+ Add New Review</button>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {currentTestimonials.map((review) => (
-                  <div key={review.id} className="p-5 border border-slate-200 rounded-2xl bg-white/60 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+                {[
+                  { name: "Ananya Sharma", rating: 5, date: "11/02/2026", title: "The Ritual That Transformed My Skin", content: "I’ve tried countless serums, but Vive’s Kumkumadi Oil is the only one that truly worked." },
+                  { name: "Kavya Iyer", rating: 5, date: "11/02/2026", title: "Golden Glow in a Bottle", content: "The Vive Vitamin C serum is simply transformative. It cleared my stubborn spots in just two weeks." },
+                  { name: "Rohan Deshmukh", rating: 4, date: "10/02/2026", title: "Purity Meets Deep Hydration", content: "Finally a cleanser that respects my skin barrier. Leaves me feeling refreshed and hydrated." }
+                ].map((review, idx) => (
+                  <div key={idx} className="p-5 border border-slate-200 rounded-2xl bg-white/60 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
                     <div>
                       <div className="flex justify-between items-start mb-3">
                         <div>
@@ -550,46 +544,6 @@ const AdminProductEdit = () => {
                   </div>
                 ))}
               </div>
-              
-              {/* Pagination */}
-              {testimonials.length > 0 && (
-                <div className="pt-4 border-t border-white/60 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <span className="text-sm text-slate-600">
-                    Showing {startTestimonialIndex + 1} to {Math.min(startTestimonialIndex + reviewsPerPage, testimonials.length)} of {testimonials.length} reviews
-                  </span>
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => setTestimonialPage(p => Math.max(1, p - 1))}
-                      disabled={testimonialPage === 1}
-                      className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-colors cursor-pointer" 
-                    >
-                      Prev
-                    </button>
-                    
-                    {[...Array(totalTestimonialPages)].map((_, i) => (
-                      <button 
-                        key={i}
-                        onClick={() => setTestimonialPage(i + 1)}
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium shadow-sm transition-colors cursor-pointer ${
-                          testimonialPage === i + 1 
-                            ? 'bg-brand-magenta text-white' 
-                            : 'bg-white border border-slate-200 text-slate-500 hover:bg-slate-50'
-                        }`}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
-
-                    <button 
-                      onClick={() => setTestimonialPage(p => Math.min(totalTestimonialPages, p + 1))}
-                      disabled={testimonialPage === totalTestimonialPages}
-                      className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-colors cursor-pointer" 
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           )}
         </div>

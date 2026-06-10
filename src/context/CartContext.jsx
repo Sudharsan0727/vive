@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
@@ -7,12 +8,12 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('vive_cart');
+    const savedCart = (typeof window !== "undefined" ? localStorage.getItem('vive_cart') : null);
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
   useEffect(() => {
-    localStorage.setItem('vive_cart', JSON.stringify(cart));
+    if (typeof window !== "undefined") { localStorage.setItem('vive_cart', JSON.stringify()); }
   }, [cart]);
 
   const addToCart = (product) => {

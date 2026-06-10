@@ -21,6 +21,7 @@ import AdminCustomers from './pages/admin/AdminCustomers';
 import AdminBanner from './pages/admin/AdminBanner';
 import AdminInstagram from './pages/admin/AdminInstagram';
 import AdminTestimonials from './pages/admin/AdminTestimonials';
+import AdminCoupons from './pages/admin/AdminCoupons';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             <Route path="products/edit/:id" element={<AdminProductEdit />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="customers" element={<AdminCustomers />} />
+            <Route path="coupons" element={<AdminCoupons />} />
             <Route path="homepage/banner" element={<AdminBanner />} />
             <Route path="homepage/instagram" element={<AdminInstagram />} />
             <Route path="homepage/testimonials" element={<AdminTestimonials />} />

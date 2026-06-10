@@ -1,5 +1,6 @@
+"use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { BESTSELLERS, FEATURED_PRODUCTS } from '../constants/BrandAssets';
+import { BESTSELLERS, FEATURED_PRODUCTS } from '@/constants/BrandAssets';
 
 const allProducts = [...BESTSELLERS, ...FEATURED_PRODUCTS];
 
@@ -33,15 +34,27 @@ export const useStore = () => useContext(StoreContext);
 export const StoreProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('vive_cart');
-    return savedCart ? JSON.parse(savedCart) : [];
+    try {
+      const savedCart = (typeof window !== "undefined" ? localStorage.getItem('vive_cart') : null);
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (e) {
+      // Silently recover from corrupted data
+      localStorage.removeItem('vive_cart');
+      return [];
+    }
   });
 
   // Wishlist State
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [wishlist, setWishlist] = useState(() => {
-    const savedWishlist = localStorage.getItem('vive_wishlist');
-    return savedWishlist ? JSON.parse(savedWishlist) : [];
+    try {
+      const savedWishlist = (typeof window !== "undefined" ? localStorage.getItem('vive_wishlist') : null);
+      return savedWishlist ? JSON.parse(savedWishlist) : [];
+    } catch (e) {
+      // Silently recover from corrupted data
+      localStorage.removeItem('vive_wishlist');
+      return [];
+    }
   });
 
   const isCartOpenRef = React.useRef(isCartOpen);
@@ -65,33 +78,56 @@ export const StoreProvider = ({ children }) => {
 
   // Promo / Coupon State
   const [appliedPromo, setAppliedPromo] = useState(() => {
-    return localStorage.getItem('vive_applied_promo') || '';
+    return (typeof window !== "undefined" ? localStorage.getItem('vive_applied_promo') : null) || '';
   });
   const [promoDiscount, setPromoDiscount] = useState(() => {
-    const saved = localStorage.getItem('vive_promo_discount');
+    const saved = (typeof window !== "undefined" ? localStorage.getItem('vive_promo_discount') : null);
     return saved ? parseInt(saved) : 0;
   });
   const [promoError, setPromoError] = useState('');
 
   // Shipping Courier Cost State (₹40 or ₹60)
   const [shippingCost, setShippingCost] = useState(() => {
-    const saved = localStorage.getItem('vive_shipping_cost');
+    const saved = (typeof window !== "undefined" ? localStorage.getItem('vive_shipping_cost') : null);
     return saved ? parseInt(saved) : 40; // Default to ST Courier
   });
 
   useEffect(() => {
-    localStorage.setItem('vive_applied_promo', appliedPromo);
-    localStorage.setItem('vive_promo_discount', promoDiscount.toString());
+    if (typeof window !== "undefined") { localStorage.setItem('vive_applied_promo', appliedPromo); };
+    if (typeof window !== "undefined") { localStorage.setItem('vive_promo_discount', promoDiscount.toString()); }
   }, [appliedPromo, promoDiscount]);
 
   useEffect(() => {
-    localStorage.setItem('vive_shipping_cost', shippingCost.toString());
+    if (typeof window !== "undefined") { localStorage.setItem('vive_shipping_cost', shippingCost.toString()); }
   }, [shippingCost]);
 
   useEffect(() => {
-    if (appliedPromo === 'VIVE15') {
-      const discount = Math.min(Math.round(cartTotal * 0.15), 300);
-      setPromoDiscount(discount);
+    if (!appliedPromo) {
+      setPromoDiscount(0);
+      return;
+    }
+    
+    // Fetch coupons created in admin panel
+    const savedCoupons = typeof window !== "undefined" ? localStorage.getItem('vive_admin_coupons') : null;
+    const adminCoupons = savedCoupons ? JSON.parse(savedCoupons) : [];
+    
+    const activeCoupon = adminCoupons.find(c => c.code === appliedPromo && c.isActive);
+    
+    if (activeCoupon) {
+      if (cartTotal < activeCoupon.minOrder) {
+        setPromoDiscount(0); // Cart value dropped below minimum
+      } else {
+        let discount = 0;
+        if (activeCoupon.type === 'percentage') {
+          discount = Math.round(cartTotal * (activeCoupon.discountValue / 100));
+          if (activeCoupon.maxDiscount && discount > activeCoupon.maxDiscount) {
+            discount = activeCoupon.maxDiscount;
+          }
+        } else if (activeCoupon.type === 'flat') {
+          discount = activeCoupon.discountValue;
+        }
+        setPromoDiscount(discount);
+      }
     } else {
       setPromoDiscount(0);
     }
@@ -99,17 +135,23 @@ export const StoreProvider = ({ children }) => {
 
   const applyPromoCode = (code) => {
     const formattedCode = code.trim().toUpperCase();
-    if (formattedCode === 'VIVE15') {
-      if (cartTotal < 299) {
-        setPromoError('Valid on order total above ₹299+');
-        return { success: false, error: 'Valid on order total above ₹299+' };
+    
+    const savedCoupons = typeof window !== "undefined" ? localStorage.getItem('vive_admin_coupons') : null;
+    const adminCoupons = savedCoupons ? JSON.parse(savedCoupons) : [];
+    
+    const activeCoupon = adminCoupons.find(c => c.code === formattedCode && c.isActive);
+
+    if (activeCoupon) {
+      if (cartTotal < activeCoupon.minOrder) {
+        setPromoError(`Valid on order total above ₹${activeCoupon.minOrder}+`);
+        return { success: false, error: `Valid on order total above ₹${activeCoupon.minOrder}+` };
       }
-      setAppliedPromo('VIVE15');
+      setAppliedPromo(formattedCode);
       setPromoError('');
       return { success: true };
     } else {
-      setPromoError('This coupon is invalid.');
-      return { success: false, error: 'This coupon is invalid.' };
+      setPromoError('This coupon is invalid or expired.');
+      return { success: false, error: 'This coupon is invalid or expired.' };
     }
   };
 
@@ -120,11 +162,11 @@ export const StoreProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    localStorage.setItem('vive_cart', JSON.stringify(cart));
+    if (typeof window !== "undefined") { localStorage.setItem('vive_cart', JSON.stringify(cart)); }
   }, [cart]);
 
   useEffect(() => {
-    localStorage.setItem('vive_wishlist', JSON.stringify(wishlist));
+    if (typeof window !== "undefined") { localStorage.setItem('vive_wishlist', JSON.stringify(wishlist)); }
   }, [wishlist]);
 
   // Cart Actions

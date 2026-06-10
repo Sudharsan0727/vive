@@ -6,17 +6,17 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const AdminDashboard = () => {
   const stats = [
-    { name: 'Total Revenue', value: '$24,562.00', change: '+14.5%', trend: 'up' },
+    { name: 'Total Revenue', value: '₹24,562.00', change: '+14.5%', trend: 'up' },
     { name: 'Total Orders', value: '1,245', change: '+8.2%', trend: 'up' },
     { name: 'New Customers', value: '342', change: '+12.4%', trend: 'up' },
     { name: 'Conversion Rate', value: '3.4%', change: '-1.2%', trend: 'down' },
   ];
 
   const recentOrders = [
-    { id: '#ORD-7352', customer: 'Emma Watson', date: 'Today, 10:24 AM', status: 'Processing', amount: '$124.50' },
-    { id: '#ORD-7351', customer: 'Liam Smith', date: 'Today, 09:12 AM', status: 'Shipped', amount: '$85.00' },
-    { id: '#ORD-7350', customer: 'Sophia Davis', date: 'Yesterday', status: 'Delivered', amount: '$210.00' },
-    { id: '#ORD-7349', customer: 'James Wilson', date: 'Yesterday', status: 'Delivered', amount: '$45.00' },
+    { id: '#ORD-7352', customer: 'Emma Watson', date: 'Today, 10:24 AM', status: 'Processing', amount: '₹124.50' },
+    { id: '#ORD-7351', customer: 'Liam Smith', date: 'Today, 09:12 AM', status: 'Shipped', amount: '₹85.00' },
+    { id: '#ORD-7350', customer: 'Sophia Davis', date: 'Yesterday', status: 'Delivered', amount: '₹210.00' },
+    { id: '#ORD-7349', customer: 'James Wilson', date: 'Yesterday', status: 'Delivered', amount: '₹45.00' },
   ];
 
   const pieData = {
